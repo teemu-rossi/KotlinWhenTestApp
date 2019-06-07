@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 enum class TestType {
     ONE,
@@ -23,7 +24,7 @@ enum class TestType {
 }
 
 class TestClass {
-    fun testMethod(type: TestType) {
+    fun testMethod(type: TestType): String {
         val testFloat: Float = when (type) {
             TestType.ONE -> 1000.0f
             TestType.TWO -> 5000.0f
@@ -33,9 +34,13 @@ class TestClass {
             TestType.SIX -> 16093.4f
             else -> 5f
         }
+        val before = "Before alloc type=$type testFloat=$testFloat\n"
         Log.e("TestClass", "Before alloc type=$type testFloat=$testFloat")
+
         val dummyObjects = List(200_000) { 1024 }
+
         Log.e("TestClass", "After alloc type=$type testFloat=$testFloat")
+        return before + "After alloc type=$type testFloat=$testFloat"
     }
 }
 
@@ -51,8 +56,8 @@ class MainActivity : AppCompatActivity() {
                     .setAction("Action", null).show()
         }
 
-        val x = TestClass()
-        x.testMethod(TestType.ONE)
+        debug_text_label.text = TestClass().testMethod(TestType.ONE)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
